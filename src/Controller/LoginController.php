@@ -46,7 +46,7 @@ class LoginController extends AbstractController
                 $data = $form->getData();
                 $email = $data['email'];
                 $user = $this->findUser($email);
-                $request->getSession()->set('user', $user);
+                $request->getSession()->set('user', $user->getId());
                 return $this->redirectToRoute('dashboard');
             }
         return $this->render('login/login.html.twig', ['form' => $form->createView()]);
