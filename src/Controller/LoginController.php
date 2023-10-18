@@ -18,6 +18,8 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class LoginController extends AbstractController
 {
+    public const PATH = '/login';
+    public const NAME = 'login';
     private ?User $user = null;
     public function __construct(private UserRepository $repository)
     {
@@ -30,7 +32,7 @@ class LoginController extends AbstractController
         $this->user = $this->repository->findOneBy(['email' => $email]);
         return $this->user;
     }
-    #[Route('/login', name: 'login')]
+    #[Route(self::PATH, self::NAME)]
     public function __invoke(Request $request): Response
     {
         $form = $this->createFormBuilder()->
@@ -46,8 +48,8 @@ class LoginController extends AbstractController
                 $data = $form->getData();
                 $email = $data['email'];
                 $user = $this->findUser($email);
-                $request->getSession()->set('user', $user->getId());
-                return $this->redirectToRoute('dashboard');
+                $request->getSession()->set('user_id', $user->getId());
+                return $this->redirectToRoute(DashboardController::NAME);
             }
         return $this->render('login/login.html.twig', ['form' => $form->createView()]);
     }

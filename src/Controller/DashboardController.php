@@ -2,22 +2,21 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DashboardController extends AbstractController
-{
-    #[Route('/dashboard', name: 'dashboard')]
-    public function index(SessionInterface $session): Response
+{    
+    public const PATH = '/dashboard';
+    public const NAME = 'dashboaard';
+    #[Route(self::PATH, self::NAME)]
+    public function __invoke( Request $request): Response
     {
-        if (!$session->has('user')) {
-            return $this->redirectToRoute('login');
-        }
-
+        $user = $request->attributes->get('user');
         return $this->render('dashboard/index.html.twig', [
-            'controller_name' => 'DashboardController'
-        ]);
+            'user' => $user
+        ]);   
     }
 }
