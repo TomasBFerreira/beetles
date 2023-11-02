@@ -10,11 +10,10 @@
 
 <div class="example-wrapper">
     <h1>Hello {{ user.username }}! ✅</h1>
-
-    This friendly message is coming from:
+    <p>Actions you can take:</p>
     <ul>
-        <li>Your controller at <code><a href="{{ '/home/tomas/dev/usrauth/usrauth_bck/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/tomas/dev/usrauth/usrauth_bck/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
+        <li><a href="{{ path('create_beetle') }}">Create Beetle</a></li>
+        <li><a href="{{ path('list_beetles') }}">List Beetles</a></li>
     </ul>
 </div>
 {% endblock %}
