@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Beetle{% endblock %}
+
+{% block content %}
+    <h1>Edit Beetle</h1>
+
+    <form method="post">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">Save</button>
+        {{ form_end(form) }}
+    </form>
+
+    <a href="{{ path('list_beetles') }}" class="btn btn-secondary">Back to List</a>
+</div>
+{% endblock %}
