@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use App\Repository\BeetleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -30,6 +31,19 @@ class Beetle
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $length = null;
+
+
+    #[ORM\ManyToOne(targetEntity: Beetle::class, inversedBy: 'offspring')]
+    #[ORM\JoinColumn(name: 'male_parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    private ?Beetle $maleParent = null;
+
+    #[ORM\ManyToOne(targetEntity: Beetle::class, inversedBy: 'offspring')]
+    #[ORM\JoinColumn(name: 'female_parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    private ?Beetle $femaleParent = null;
+
+
+    #[ORM\OneToMany(targetEntity: Beetle::class, mappedBy: 'maleParent')]
+    private $offspring;
 
     public function getId(): ?int
     {
@@ -114,4 +128,54 @@ class Beetle
 
         return $this;
     }
+
+    public function addOffspring(Beetle $offspring): self
+{
+    if (!$this->offspring->contains($offspring)) {
+        $this->offspring[] = $offspring;
+        $offspring->setMaleParent($this); // Assuming a bidirectional association
+    }
+
+    return $this;
+}
+
+public function removeOffspring(Beetle $offspring): self
+{
+    if ($this->offspring->removeElement($offspring)) {
+        // set the owning side to null (unless already changed)
+        if ($offspring->getMaleParent() === $this) {
+            $offspring->setMaleParent(null); // Assuming a bidirectional association
+        }
+    }
+
+    return $this;
+}
+
+public function getOffspring(): ?Collection
+{
+    return $this->offspring;
+}
+public function setMaleParent(?Beetle $maleParent): self
+{
+    $this->maleParent = $maleParent;
+
+    return $this;
+}
+
+public function getMaleParent(): ?Beetle
+{
+    return $this->maleParent;
+}
+
+public function setFemaleParent(?Beetle $femaleParent): self
+{
+    $this->femaleParent = $femaleParent;
+
+    return $this;
+}
+
+public function getFemaleParent(): ?Beetle
+{
+    return $this->femaleParent;
+}
 }

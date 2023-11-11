@@ -8,6 +8,7 @@
             <thead>
                 <tr>
                     <th>Lineage</th>
+                    <th>Name</th>
                     <th>Gen</th>
                     <th>Sex</th>
                     <th>Date</th>
@@ -19,6 +20,7 @@
                 {% for beetle in beetles %}
                     <tr>
                         <td>{{ beetle.lineage }}</td>
+                        <td>{{ beetle.name }}</td>
                         <td>{{ beetle.gen }}</td>
                         <td>{{ beetle.sex }}</td>
                         <td>{{ beetle.date|date('Y-m-d') }}</td>
