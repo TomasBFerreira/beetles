@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <h2>Create a New Beetle</h2>
+
+        {{ form_start(form) }}
+        {{ form_row(form.gen) }}
+        {{ form_row(form.sex) }}
+        {{ form_row(form.date) }}
+        {{ form_row(form.length) }}
+
+        <button type="submit" class="btn btn-primary">Create Beetle</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

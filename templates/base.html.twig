@@ -1,20 +1,48 @@
 <!DOCTYPE html>
 <html>
     <head>
+    {% if user is not defined %}
+    {% set user = null %}
+{% endif %}
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body>
-        {% block body %}
-            <div id="content">
-                {% block content %}{% endblock %}
-            </div>
-        {% endblock %}
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ path('home') }}">Home</a>
+        <ul class="navbar-nav ml-auto">
+            {% if user %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('dashboard') }}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('logout') }}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('login') }}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</nav>
+
+        </header>
+        <main>
+            {% block body %}
+                <div id="content">
+                    {% block content %}{% endblock %}
+                </div>
+            {% endblock %}
+        </main>
     </body>
 </html>
