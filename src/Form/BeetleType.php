@@ -18,6 +18,18 @@ class BeetleType extends AbstractType
                 'label' => 'Lineage',
                 'required' => false, 
             ])
+            ->add('FemaleParent', TextType::class, [
+                'label' => 'Female Parent',
+                'required' => false, 
+            ])
+            ->add('MaleParent', TextType::class, [
+                'label' => 'Male Parent',
+                'required' => false, 
+            ])
+            ->add('Offspring', TextType::class, [
+                'label' => 'Child',
+                'required' => false, 
+            ])
             ->add('gen', TextType::class, [
                 'label' => 'Generation',
             ])

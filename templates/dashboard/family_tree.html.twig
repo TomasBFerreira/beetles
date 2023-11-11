@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+{% macro renderBeetle(beetle) %}
+    {{ beetle.name }}
+    {% if beetle.offspring is not empty %}
+        <ul>
+            {% for child in beetle.offspring %}
+                <li>
+                    {{ _self.renderBeetle(child) }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+<h1>Family Trees</h1>
+
+<ul>
+    {% for tree in familyTrees %}
+        <li>
+            {{ _self.renderBeetle(tree) }}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

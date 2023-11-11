@@ -20,29 +20,16 @@ class BeetleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Beetle::class);
     }
+    public function findFamilyTrees()
+    {
+        $qb = $this->createQueryBuilder('b');
+        $qb->select('b')
+            ->leftJoin('b.offspring', 'o')
+            ->addSelect('o')
+            ->where('b.maleParent IS NULL AND b.femaleParent IS NULL');
 
-//    /**
-//     * @return Beetle[] Returns an array of Beetle objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+        $query = $qb->getQuery();
 
-//    public function findOneBySomeField($value): ?Beetle
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $query->getResult();
+    }
 }

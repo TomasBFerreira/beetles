@@ -5,6 +5,10 @@
         <h2>Create a New Beetle</h2>
 
         {{ form_start(form) }}
+        {{ form_row(form.lineage)}}
+        {{ form_row(form.FemaleParent)}}
+        {{ form_row(form.MaleParent)}}
+        {{ form_row(form.Offspring)}}
         {{ form_row(form.gen) }}
         {{ form_row(form.sex) }}
         {{ form_row(form.date) }}
