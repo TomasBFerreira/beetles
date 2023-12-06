@@ -20,16 +20,15 @@ class BeetleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Beetle::class);
     }
-    public function findFamilyTrees()
+    public function findFamilyTrees(): array
     {
-        $qb = $this->createQueryBuilder('b');
-        $qb->select('b')
-            ->leftJoin('b.offspring', 'o')
-            ->addSelect('o')
-            ->where('b.maleParent IS NULL AND b.femaleParent IS NULL');
-
-        $query = $qb->getQuery();
-
-        return $query->getResult();
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.relationships', 'r')
+            ->addSelect('r')
+            ->getQuery()
+            ->getResult();
     }
+
+
+
 }

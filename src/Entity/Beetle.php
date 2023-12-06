@@ -2,11 +2,15 @@
 
 namespace App\Entity;
 
+use App\Entity\Relationship;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\BeetleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: BeetleRepository::class)]
+
 class Beetle
 {
     #[ORM\Id]
@@ -33,17 +37,13 @@ class Beetle
     private ?string $length = null;
 
 
-    #[ORM\ManyToOne(targetEntity: Beetle::class, inversedBy: 'offspring')]
-    #[ORM\JoinColumn(name: 'male_parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private ?Beetle $maleParent = null;
-
-    #[ORM\ManyToOne(targetEntity: Beetle::class, inversedBy: 'offspring')]
-    #[ORM\JoinColumn(name: 'female_parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private ?Beetle $femaleParent = null;
-
-
-    #[ORM\OneToMany(targetEntity: Beetle::class, mappedBy: 'maleParent')]
-    private $offspring;
+    #[ORM\OneToMany(targetEntity: Relationship::class, mappedBy: 'parent')]
+    private $relationships;
+    
+    public function __construct()
+    {
+        $this->relationships = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -129,53 +129,25 @@ class Beetle
         return $this;
     }
 
-    public function addOffspring(Beetle $offspring): self
-{
-    if (!$this->offspring->contains($offspring)) {
-        $this->offspring[] = $offspring;
-        $offspring->setMaleParent($this); // Assuming a bidirectional association
-    }
-
-    return $this;
-}
-
-public function removeOffspring(Beetle $offspring): self
-{
-    if ($this->offspring->removeElement($offspring)) {
-        // set the owning side to null (unless already changed)
-        if ($offspring->getMaleParent() === $this) {
-            $offspring->setMaleParent(null); // Assuming a bidirectional association
+public function addRelationship(Relationship $relationship): self
+    {
+        if (!$this->relationships->contains($relationship)) {
+            $this->relationships[] = $relationship;
+            $relationship->setParent($this);
         }
+
+        return $this;
     }
 
-    return $this;
-}
+    public function removeRelationship(Relationship $relationship): self
+    {
+        $this->relationships->removeElement($relationship);
 
-public function getOffspring(): ?Collection
-{
-    return $this->offspring;
-}
-public function setMaleParent(?Beetle $maleParent): self
-{
-    $this->maleParent = $maleParent;
+        return $this;
+    }
 
-    return $this;
-}
-
-public function getMaleParent(): ?Beetle
-{
-    return $this->maleParent;
-}
-
-public function setFemaleParent(?Beetle $femaleParent): self
-{
-    $this->femaleParent = $femaleParent;
-
-    return $this;
-}
-
-public function getFemaleParent(): ?Beetle
-{
-    return $this->femaleParent;
-}
+    public function getRelationships(): Collection
+    {
+        return $this->relationships;
+    }
 }

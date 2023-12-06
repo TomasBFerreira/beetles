@@ -1,26 +1,22 @@
-{% extends 'base.html.twig' %}
-
+{# dashboard/family_tree.html.twig #}
 {% block content %}
-{% macro renderBeetle(beetle) %}
-    {{ beetle.name }}
-    {% if beetle.offspring is not empty %}
-        <ul>
-            {% for child in beetle.offspring %}
-                <li>
-                    {{ _self.renderBeetle(child) }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endmacro %}
+    <h1>Family Trees</h1>
 
-<h1>Family Trees</h1>
-
-<ul>
-    {% for tree in familyTrees %}
-        <li>
-            {{ _self.renderBeetle(tree) }}
-        </li>
+    {% for lineage, trees in familyTree %}
+        <h2>{{ lineage }}</h2>
+        {{ renderFamilyTree(trees) }}
     {% endfor %}
-</ul>
 {% endblock %}
+
+{% macro renderFamilyTree(trees) %}
+    <ul>
+        {% for id, tree in trees %}
+            <li>
+                {{ tree.beetle.name }}
+                {% if tree.children is not empty %}
+                    {{ _self.renderFamilyTree(tree.children) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

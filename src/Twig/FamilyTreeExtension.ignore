@@ -1,0 +1,85 @@
+<?php
+namespace App\Twig;
+
+use App\Entity\Beetle;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+
+class FamilyTreeExtension extends AbstractExtension
+{
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('render_family_tree', [$this, 'renderFamilyTree'], ['is_safe' => ['html']]),
+        ];
+    }
+
+    public function renderFamilyTree(array $familyTrees): string
+    {
+        $output = '<ul>';
+        foreach ($familyTrees as $tree) {
+            $output .= '<li>' . $this->renderBeetle($tree) . '</li>';
+        }
+        $output .= '</ul>';
+
+        return $output;
+    }
+
+    private function renderBeetle(Beetle $beetle): string
+    {
+        $output = $beetle->getName();
+
+        $relationships = $beetle->get<?php
+        namespace App\Twig;
+        
+        use App\Entity\Beetle;
+        use Twig\Extension\AbstractExtension;
+        use Twig\TwigFunction;
+        
+        class FamilyTreeExtension extends AbstractExtension
+        {
+            public function getFunctions(): array
+            {
+                return [
+                    new TwigFunction('render_family_tree', [$this, 'renderFamilyTree'], ['is_safe' => ['html']]),
+                ];
+            }
+        
+            public function renderFamilyTree(array $familyTrees): string
+            {
+                $output = '<ul>';
+                foreach ($familyTrees as $tree) {
+                    $output .= '<li>' . $this->renderBeetle($tree) . '</li>';
+                }
+                $output .= '</ul>';
+        
+                return $output;
+            }
+        
+            private function renderBeetle(Beetle $beetle): string
+            {
+                $output = $beetle->getName();
+        
+                $relationships = $beetle->getRelationships();
+                if ($relationships->count() > 0) {
+                    $output .= '<ul>';
+                    foreach ($relationships as $relationship) {
+                        $output .= '<li>' . $this->renderBeetle($relationship) . '</li>';
+                    }
+                    $output .= '</ul>';
+                }
+        
+                return $output;
+            }
+        }Relationships();
+        if ($relationships->count() > 0) {
+            $output .= '<ul>';
+            foreach ($relationships as $relationship) {
+                $output .= '<li>' . $this->renderBeetle($relationship) . '</li>';
+            }
+            $output .= '</ul>';
+        }
+
+        return $output;
+    }
+}
