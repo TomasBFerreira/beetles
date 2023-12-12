@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Beetle;
 use App\Repository\RelationshipRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RelationshipRepository::class)]
@@ -15,42 +17,40 @@ class Relationship
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Beetle::class, inversedBy: 'relationships')]
-    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ?Beetle $parent = null;
+    #[ORM\ManyToOne()]
+    #[ORM\JoinColumn(nullable: false)]
+    private Beetle $father;
 
-    #[ORM\ManyToOne(targetEntity: Beetle::class, inversedBy: 'relationships')]
-    #[ORM\JoinColumn(name: 'child_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ?Beetle $child = null;
+    #[ORM\ManyToOne()]
+    #[ORM\JoinColumn(nullable: false)]
+    private Beetle $mother;
 
+    #[ORM\OneToMany(targetEntity: Beetle::class, mappedBy: 'childOf')]
+    private Collection $children;
+    public function __construct(Beetle $father, Beetle $mother)
+    {
+        $this->children = new ArrayCollection();
+        $this->father = $father;
+        $this->mother = $mother;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-
-    public function getParent(): ?Beetle
+    public function getFather(): Beetle
     {
-        return $this->parent;
+        return $this->father;
+    }
+    
+    public function getMother(): Beetle
+    {
+        return $this->mother;
     }
 
-    public function setParent(?Beetle $parent): self
+    public function getChildren(): Collection
     {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    public function getChild(): ?Beetle
-    {
-        return $this->child;
-    }
-
-    public function setChild(?Beetle $child): self
-    {
-        $this->child = $child;
-
-        return $this;
+        return $this->children;
     }
 }

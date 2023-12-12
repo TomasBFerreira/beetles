@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\BeetleRepository;
+use App\Repository\RelationshipRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class FamilyTreeController extends AbstractController
@@ -15,34 +16,12 @@ class FamilyTreeController extends AbstractController
     }
 
     #[Route('/dashboard/family-tree', name: 'family_tree')]
-    public function __invoke(BeetleRepository $beetleRepository): Response
+    public function __invoke(RelationshipRepository $relationshipRepository): Response
     {
-        $familyTrees = $beetleRepository->findFamilyTrees();
-        $hierarchicalFamilyTree = $this->buildHierarchicalFamilyTree($familyTrees);
-
+        $relationShips = $relationshipRepository->findAllRelationships();
         
         return $this->render('dashboard/family_tree.html.twig', [
-            'familyTrees' => $familyTrees,
+            'relationships' => $relationShips,
                 ]);
     }
-
-    private function buildHierarchicalFamilyTree(array $familyTrees): array
-{
-    $hierarchicalTree = [];
-
-    foreach ($familyTrees as $beetle) {
-        $lineage = $beetle->getLineage();
-
-        if (!isset($hierarchicalTree[$lineage])) {
-            $hierarchicalTree[$lineage] = [];
-        }
-
-        $hierarchicalTree[$lineage][$beetle->getId()] = [
-            'beetle' => $beetle,
-            'children' => $this->buildHierarchicalFamilyTree($beetle->getChild()->toArray()),
-        ];
-    }
-
-    return $hierarchicalTree;
-}
 }

@@ -2,9 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Relationship;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\BeetleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -35,14 +32,13 @@ class Beetle
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $length = null;
-
-
-    #[ORM\OneToMany(targetEntity: Relationship::class, mappedBy: 'parent')]
-    private $relationships;
     
+    #[ORM\ManyToOne()]
+    private ?Relationship $childOf = null;
+
     public function __construct()
     {
-        $this->relationships = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -129,25 +125,15 @@ class Beetle
         return $this;
     }
 
-public function addRelationship(Relationship $relationship): self
+    public function getChildOf(): ?Relationship
     {
-        if (!$this->relationships->contains($relationship)) {
-            $this->relationships[] = $relationship;
-            $relationship->setParent($this);
-        }
-
-        return $this;
+        return $this->childOf;
     }
 
-    public function removeRelationship(Relationship $relationship): self
+    public function setChildOf(?Relationship $childOf): static
     {
-        $this->relationships->removeElement($relationship);
+        $this->childOf = $childOf;
 
         return $this;
-    }
-
-    public function getRelationships(): Collection
-    {
-        return $this->relationships;
     }
 }

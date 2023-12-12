@@ -1,22 +1,18 @@
-{# dashboard/family_tree.html.twig #}
+{% extends 'base.html.twig' %}
+
 {% block content %}
     <h1>Family Trees</h1>
 
-    {% for lineage, trees in familyTree %}
-        <h2>{{ lineage }}</h2>
-        {{ renderFamilyTree(trees) }}
+    {% for relationship in relationships %}
+        <div class="family-tree">
+            <div class="parent">{{ relationship.getFather().getName() }}</div>
+            <div class="parent">{{ relationship.getMother().getName() }}</div>
+            
+            <div class="children">
+                {% for child in relationship.getChildren() %}
+                    <div class="child">{{ child.getName() }}</div>
+                {% endfor %}
+            </div>
+        </div>
     {% endfor %}
 {% endblock %}
-
-{% macro renderFamilyTree(trees) %}
-    <ul>
-        {% for id, tree in trees %}
-            <li>
-                {{ tree.beetle.name }}
-                {% if tree.children is not empty %}
-                    {{ _self.renderFamilyTree(tree.children) }}
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-{% endmacro %}
