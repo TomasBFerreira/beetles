@@ -31,4 +31,23 @@ class RelationshipRepository extends ServiceEntityRepository
         return $this->findAll();
     }
 
+
+    /**
+     * Find relationships filtered by user input
+     *
+     * @param string $input User input to filter relationships
+     * @return Relationship[]
+     */
+    public function findFilteredRelationships(string $input): array
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.father', 'father')
+            ->join('r.mother', 'mother')
+            ->andWhere('father.name LIKE :input OR mother.name LIKE :input')
+            ->setParameter('input', '%'.$input.'%')
+            ->orderBy('r.father', 'ASC')
+            ->addOrderBy('r.mother', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

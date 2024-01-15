@@ -6,14 +6,12 @@
 
         {{ form_start(form) }}
         {{ form_row(form.lineage)}}
-        {{ form_row(form.FemaleParent)}}
-        {{ form_row(form.MaleParent)}}
-        {{ form_row(form.Offspring)}}
         {{ form_row(form.gen) }}
         {{ form_row(form.sex) }}
         {{ form_row(form.date) }}
         {{ form_row(form.length) }}
-
+        {{ form_label(form.relationship) }}
+        {{ form_widget(form.relationship, { 'attr': {'class': 'relationship-dropdown'} }) }}
         <button type="submit" class="btn btn-primary">Create Beetle</button>
         {{ form_end(form) }}
     </div>

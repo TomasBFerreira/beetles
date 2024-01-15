@@ -53,4 +53,9 @@ class Relationship
     {
         return $this->children;
     }
+
+    public function getDisplayProperty(): string
+    {
+        return sprintf('%s & %s', $this->father->getName(), $this->mother->getName());
+    }
 }

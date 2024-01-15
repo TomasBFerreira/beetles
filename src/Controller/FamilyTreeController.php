@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Relationship;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\BeetleRepository;
-use App\Repository\RelationshipRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class FamilyTreeController extends AbstractController
@@ -16,12 +16,13 @@ class FamilyTreeController extends AbstractController
     }
 
     #[Route('/dashboard/family-tree', name: 'family_tree')]
-    public function __invoke(RelationshipRepository $relationshipRepository): Response
+    public function __invoke(): Response
     {
-        $relationShips = $relationshipRepository->findAllRelationships();
-        
+        $relationships = $this->doctrine
+            ->getRepository(Relationship::class)
+            ->findAll();    
         return $this->render('dashboard/family_tree.html.twig', [
-            'relationships' => $relationShips,
-                ]);
+            'relationships' => $relationships,
+        ]);
     }
 }
