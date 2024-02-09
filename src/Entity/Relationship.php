@@ -16,15 +16,15 @@ class Relationship
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
-
+    
     #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
     private Beetle $father;
-
+    
     #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
     private Beetle $mother;
-
+    
     #[ORM\OneToMany(targetEntity: Beetle::class, mappedBy: 'childOf')]
     private Collection $children;
     public function __construct(Beetle $father, Beetle $mother)
@@ -33,12 +33,12 @@ class Relationship
         $this->father = $father;
         $this->mother = $mother;
     }
-
+    
     public function getId(): ?int
     {
         return $this->id;
     }
-
+    
     public function getFather(): Beetle
     {
         return $this->father;
@@ -48,14 +48,19 @@ class Relationship
     {
         return $this->mother;
     }
-
+    
     public function getChildren(): Collection
     {
         return $this->children;
     }
-
+    
     public function getDisplayProperty(): string
     {
         return sprintf('%s & %s', $this->father->getName(), $this->mother->getName());
+    }
+    
+    public function __toString()
+    {
+        return $this->getDisplayProperty();
     }
 }

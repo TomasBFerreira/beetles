@@ -2,12 +2,17 @@
 
 namespace App\Form;
 
+use App\Entity\Beetle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Relationship;
+use Doctrine\ORM\EntityRepository;
+
 
 class BeetleType extends AbstractType
 {
@@ -38,7 +43,8 @@ class BeetleType extends AbstractType
                 'label' => 'Length',
                 'required' => false, 
             ])
-            ->add('relationship', RelationshipType::class, [
+            ->add('relationship', EntityType::class, [
+                'class' => Relationship::class,
                 'label' => 'Relationship',
             ]);
     }
@@ -46,7 +52,7 @@ class BeetleType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'App\Entity\Beetle',
+            'data_class' => Beetle::class,
         ]);
     }
 }

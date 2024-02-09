@@ -10,9 +10,10 @@ use App\Entity\Beetle;
 use App\Form\BeetleType;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 class CreateBeetleController extends AbstractController
 {
-    /*
+    
     public function __construct(private ManagerRegistry $doctrine)
     {
     }
@@ -36,5 +37,5 @@ class CreateBeetleController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    */
+    
 }

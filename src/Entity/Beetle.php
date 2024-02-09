@@ -33,8 +33,11 @@ class Beetle
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $length = null;
     
-    #[ORM\ManyToOne()]
-    private ?Relationship $childOf = null;
+    #[ORM\ManyToOne(targetEntity: Relationship::class, inversedBy: "children")]
+    private $childOf = null;
+
+    #[ORM\ManyToOne(targetEntity: Relationship::class)]
+    private $relationship = null;
 
     public function __construct()
     {
@@ -130,9 +133,21 @@ class Beetle
         return $this->childOf;
     }
 
-    public function setChildOf(?Relationship $childOf): static
+    public function setChildOf(?Relationship $childOf): self
     {
         $this->childOf = $childOf;
+
+        return $this;
+    }
+
+    public function getRelationship(): ?Relationship
+    {
+        return $this->relationship;
+    }
+
+    public function setRelationship(?Relationship $relationship): self
+    {
+        $this->relationship = $relationship;
 
         return $this;
     }
