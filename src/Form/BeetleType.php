@@ -11,8 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Relationship;
-use Doctrine\ORM\EntityRepository;
-
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class BeetleType extends AbstractType
 {
@@ -42,6 +41,11 @@ class BeetleType extends AbstractType
             ->add('length', TextType::class, [
                 'label' => 'Length',
                 'required' => false, 
+            ])
+            ->add('picture', FileType::class, [
+                'label' => 'Picture',
+                'mapped' => false,
+                'required' => false,
             ])
             ->add('relationship', EntityType::class, [
                 'class' => Relationship::class,

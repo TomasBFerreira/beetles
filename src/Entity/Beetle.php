@@ -36,6 +36,9 @@ class Beetle
     #[ORM\ManyToOne(targetEntity: Relationship::class, inversedBy: "children")]
     private $childOf = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $pictureFilename = null;
+
     #[ORM\ManyToOne(targetEntity: Relationship::class)]
     private $relationship = null;
 
@@ -136,6 +139,18 @@ class Beetle
     public function setChildOf(?Relationship $childOf): self
     {
         $this->childOf = $childOf;
+
+        return $this;
+    }
+
+    public function getPictureFilename(): ?string
+    {
+        return $this->pictureFilename;
+    }
+
+    public function setPictureFilename(?string $pictureFilename): self
+    {
+        $this->pictureFilename = $pictureFilename;
 
         return $this;
     }
