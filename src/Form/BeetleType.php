@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Relationship;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 
 class BeetleType extends AbstractType
 {
@@ -46,6 +47,15 @@ class BeetleType extends AbstractType
                 'label' => 'Picture',
                 'mapped' => false,
                 'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '50M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid JPEG document',
+                    ])
+                ],
             ])
             ->add('relationship', EntityType::class, [
                 'class' => Relationship::class,
