@@ -7,6 +7,7 @@ use App\Entity\Beetle;
 use App\Repository\RelationshipRepository;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use Ramsey\Uuid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RelationshipRepository::class)]
@@ -20,17 +21,19 @@ class Relationship
     private $id = null;
     
     #[ORM\ManyToOne()]
-    #[ORM\JoinColumn(nullable: false)]
-    private Beetle $father;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Beetle $father = null;
     
     #[ORM\ManyToOne()]
-    #[ORM\JoinColumn(nullable: false)]
-    private Beetle $mother;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Beetle $mother = null;
     
     #[ORM\OneToMany(targetEntity: Beetle::class, mappedBy: 'childOf')]
     private Collection $children;
-    public function __construct(Beetle $father, Beetle $mother, )
+    
+    public function __construct(Beetle $father, Beetle $mother)
     {
+        $this->id = Uuid::uuid4();
         $this->children = new ArrayCollection();
         $this->father = $father;
         $this->mother = $mother;
@@ -58,7 +61,11 @@ class Relationship
     
     public function getDisplayProperty(): string
     {
-        return sprintf('%s & %s', $this->father->getName(), $this->mother->getName());
+        if ($this->father !== null && $this->mother !== null) {
+            return sprintf('%s & %s', $this->father->getName(), $this->mother->getName());
+        }
+    
+        return 'Unknown';
     }
     
     public function __toString()

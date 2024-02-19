@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\BeetleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
+use Ramsey\Uuid\Uuid;
 
 
 #[ORM\Entity(repositoryClass: BeetleRepository::class)]
@@ -11,9 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Beetle
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'Ramsey\Uuid\Doctrine\UuidGenerator')]
+    private $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -36,7 +39,7 @@ class Beetle
     #[ORM\ManyToOne(targetEntity: Relationship::class, inversedBy: "children")]
     private $childOf = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $pictureFilename = null;
 
     #[ORM\ManyToOne(targetEntity: Relationship::class)]
@@ -44,10 +47,10 @@ class Beetle
 
     public function __construct()
     {
-
+        $this->id = Uuid::uuid4();
     }
 
-    public function getId(): ?int
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }
