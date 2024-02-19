@@ -2,27 +2,55 @@
 
 namespace App\Controller;
 
-use App\Entity\Relationship;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\BeetleRepository;
+use App\Entity\Beetle;
 
 class FamilyTreeController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $doctrine)
+    public function __construct(private BeetleRepository $repository)
     {
     }
 
-    #[Route('/dashboard/family-tree', name: 'family_tree')]
-    public function __invoke(): Response
+    #[Route('/api/familytree', name: 'api_familytree', methods: ['GET'])]
+    public function __invoke(): JsonResponse
     {
-        $relationships = $this->doctrine
-            ->getRepository(Relationship::class)
-            ->findAll();    
-        return $this->render('dashboard/family_tree.html.twig', [
-            'relationships' => $relationships,
-        ]);
+        $beetles = $this->repository->findAll();
+
+        $data = [];
+        foreach ($beetles as $beetle) {
+            $data[] = [
+                'id' => $beetle->getId(),
+                'name' => $beetle->getName(),
+                'lineage' => $beetle->getLineage(),
+                'gen' => $beetle->getGen(),
+                'sex' => $beetle->getSex(),
+                'date' => $beetle->getDate()->format('Y-m-d'),
+                'length' => $beetle->getLength(),
+                'pictureFilename' => $beetle->getPictureFilename(),
+                'relationship' => $beetle->getRelationship() ? $beetle->getRelationship()->getId() : null,
+            ];
+        }
+
+        return new JsonResponse($data);
     }
+
+    #[Route('/api/familytree/search/{name}', name: 'api_familytree_search', methods: ['GET'])]
+public function search(string $name): JsonResponse
+{
+    $beetles = $this->repository->findByName($name);
+
+    $data = [];
+    foreach ($beetles as $beetle) {
+        $data[] = [
+            'id' => $beetle->getId(),
+            'name' => $beetle->getName(),
+        ];
+    }
+
+    return new JsonResponse($data);
 }
+}
+?>

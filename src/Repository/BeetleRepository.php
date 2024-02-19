@@ -29,6 +29,13 @@ class BeetleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
+    public function findByName(string $name)
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->getQuery()
+            ->getResult();
+    }
 
 }

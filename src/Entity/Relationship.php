@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Beetle;
 use App\Repository\RelationshipRepository;
 use Doctrine\Common\Collections\Collection;
+use Ramsey\Uuid\UuidInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RelationshipRepository::class)]
@@ -13,9 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Relationship
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'Ramsey\Uuid\Doctrine\UuidGenerator')]
+    private $id = null;
     
     #[ORM\ManyToOne()]
     #[ORM\JoinColumn(nullable: false)]
@@ -27,14 +29,14 @@ class Relationship
     
     #[ORM\OneToMany(targetEntity: Beetle::class, mappedBy: 'childOf')]
     private Collection $children;
-    public function __construct(Beetle $father, Beetle $mother)
+    public function __construct(Beetle $father, Beetle $mother, )
     {
         $this->children = new ArrayCollection();
         $this->father = $father;
         $this->mother = $mother;
     }
     
-    public function getId(): ?int
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }
